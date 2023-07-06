@@ -26,7 +26,7 @@ namespace ChatServer
             User = new(username);
 
             IPEndPoint p = (IPEndPoint)client.Client.RemoteEndPoint!;
-            Console.WriteLine($"[{DateTime.Now}]: Client connected: {User.UserName} From: {p.Address}:{p.Port}");
+            Console.WriteLine($"[{DateTime.Now}][Connect]   : UserName: {User.UserName} From: {p.Address}:{p.Port}");
 
             Task.Run(Process);
         }
@@ -42,14 +42,14 @@ namespace ChatServer
                     {
                         case Opcode.Message:
                             string message = packetReader.ReadMessage();
-                            Console.WriteLine($"[{DateTime.Now}]: Message: {message}");
+                            Console.WriteLine($"[{DateTime.Now}][Message]   : \"{message}\"({User.UserName})");
                             MessageReceivedEvent?.Invoke(message);
                             break;
                     }
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine($"[{DateTime.Now}]: {User.UID} Disconnected");
+                    Console.WriteLine($"[{DateTime.Now}][Disconnect]: UserName: {User.UserName} ({User.UID})");
                     ClientSocket.Close();
                     DisconnectedEvent?.Invoke(User.UID);
                     break;
