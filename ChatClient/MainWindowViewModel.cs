@@ -7,6 +7,7 @@ using System.Linq;
 using ChatCommon.Model;
 using System.Net;
 using ChatCommon;
+using System.Threading.Tasks;
 
 namespace ChatFun
 {
@@ -34,7 +35,7 @@ namespace ChatFun
         public string ConnectButtonDisplay => IsConnected ? "Disconnect" : "Connect";
 
         [RelayCommand]
-        private void ToggleConnection()
+        private async Task ToggleConnectionAsync()
         {
             if (IsConnected)
             {
@@ -55,12 +56,13 @@ namespace ChatFun
                     return;
                 try
                 {
-                    server.ConnectToServer(ipAddress, port, Username);
+                    await server.ConnectToServerAsync(ipAddress, port, Username);
                     IsConnected = true;
                 }
                 catch
                 {
-
+                    Address = "";
+                    PortStr = "";
                 }
             }
         }

@@ -23,12 +23,12 @@ namespace ChatFun
             client = new();
         }
 
-        public void ConnectToServer(IPAddress address, int port, string username)
+        public async Task ConnectToServerAsync(IPAddress address, int port, string username)
         {
             if (client.Connected)
                 return;
 
-            client.Connect(address, port);
+            await client.ConnectAsync(address, port);
 
             PacketReader = new(client.GetStream());
 
