@@ -1,5 +1,5 @@
 ﻿using ChatServer;
-using IO;
+using ChatCommon.IO;
 using System.Net;
 using System.Net.Sockets;
 
@@ -35,7 +35,7 @@ class ClientInstance
             foreach (Client client in clients)
             {
                 PacketBuilder broadCastPacket = new();
-                broadCastPacket.WriteOpCode(1);
+                broadCastPacket.WriteOpCode(Opcode.UserConnect);
                 broadCastPacket.WriteMessage(client.UserName);
                 broadCastPacket.WriteMessage(client.UID.ToString());
                 client_to_send.ClientSocket.Client.Send(broadCastPacket.GetPackedBytes());
@@ -46,7 +46,7 @@ class ClientInstance
     private void BroadCastMessage(string message)
     {
         PacketBuilder broadCastPacket = new();
-        broadCastPacket.WriteOpCode(5);
+        broadCastPacket.WriteOpCode(Opcode.Message);
         broadCastPacket.WriteMessage(message);
 
         foreach (Client client_to_send in clients)
@@ -61,7 +61,7 @@ class ClientInstance
         clients.Remove(disconnectedClient);
 
         PacketBuilder broadCastPacket = new();
-        broadCastPacket.WriteOpCode(10);
+        broadCastPacket.WriteOpCode(Opcode.UserDisconnect);
         broadCastPacket.WriteMessage(uid.ToString());
 
         foreach (Client client_to_send in clients)
@@ -70,14 +70,3 @@ class ClientInstance
         }
     }
 }
-
-//namespace ChatServer
-//{
-//    public class Program
-//    {
-//        static void Main(string[] args)
-//        {
-//            Console.WriteLine("Hello World!");
-//        }
-//    }
-//}

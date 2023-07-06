@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using System.Net.Sockets;
-using IO;
+using ChatCommon.IO;
 
 namespace ChatServer
 {
@@ -22,7 +22,7 @@ namespace ChatServer
 
             packetReader = new(ClientSocket.GetStream());
 
-            byte opcode = packetReader.ReadByte();
+            Opcode opcode = packetReader.ReadOpcede();
             UserName = packetReader.ReadMessage();
 
             IPEndPoint p = (IPEndPoint)client.Client.RemoteEndPoint!;
@@ -37,10 +37,10 @@ namespace ChatServer
             {
                 try
                 {
-                    byte opcode = packetReader.ReadByte();
+                    Opcode opcode = packetReader.ReadOpcede();
                     switch (opcode)
                     {
-                        case 5:
+                        case Opcode.Message:
                             string message = packetReader.ReadMessage();
                             Console.WriteLine($"[{DateTime.Now}]: Message: {message}");
                             MessageReceivedEvent?.Invoke(message);

@@ -1,7 +1,7 @@
 ﻿using System.Net.Sockets;
 using System.Text;
 
-namespace IO
+namespace ChatCommon.IO
 {
     public class PacketReader : BinaryReader
     {
@@ -23,6 +23,11 @@ namespace IO
 
             string message = Encoding.ASCII.GetString(buffer);
             return message;
+        }
+
+        public Opcode ReadOpcede()
+        {
+            return (Opcode)ReadByte();
         }
     }
 }

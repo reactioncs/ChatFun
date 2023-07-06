@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatFun", "ChatFun\ChatFun.csproj", "{F7D92844-0694-45FA-AB38-7E10F8022279}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatClient", "ChatFun\ChatClient.csproj", "{F7D92844-0694-45FA-AB38-7E10F8022279}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatServer", "ChatServer\ChatServer.csproj", "{44363258-6476-486B-8D1B-E1174ADEFB79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatServer", "ChatServer\ChatServer.csproj", "{44363258-6476-486B-8D1B-E1174ADEFB79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO", "IO\IO.csproj", "{03446CE7-30CB-4D4E-AE71-9355A3C8F3FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatCommon", "IO\ChatCommon.csproj", "{03446CE7-30CB-4D4E-AE71-9355A3C8F3FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

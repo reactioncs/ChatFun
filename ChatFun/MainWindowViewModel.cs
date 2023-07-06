@@ -19,7 +19,7 @@ namespace ChatFun
         [NotifyCanExecuteChangedFor(nameof(SendMessageCommand))]
         private string message = string.Empty;
 
-        public ObservableCollection<UserModel> Users { get; set; } = new() { new("David", new()), new("Bob", new()) };
+        public ObservableCollection<UserModel> Users { get; set; } = new();
         public ObservableCollection<string> Messages { get; set; } = new();
 
         private Server server = new();

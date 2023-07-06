@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace IO
+namespace ChatCommon.IO
 {
     public class PacketBuilder
     {
@@ -11,9 +11,9 @@ namespace IO
             stream = new();    
         }
 
-        public void WriteOpCode(byte opcode)
+        public void WriteOpCode(Opcode opcode)
         {
-            stream.WriteByte(opcode);
+            stream.WriteByte((byte)opcode);
         }
 
         public void WriteMessage(string message)

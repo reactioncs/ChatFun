@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using IO;
+using ChatCommon.IO;
 
 namespace ChatFun
 {
@@ -30,7 +30,7 @@ namespace ChatFun
             PacketReader = new(client.GetStream());
 
             PacketBuilder packet = new();
-            packet.WriteOpCode(0);
+            packet.WriteOpCode(Opcode.EstablishConnection);
             packet.WriteMessage(username);
             client.Client.Send(packet.GetPackedBytes());
 
@@ -40,7 +40,7 @@ namespace ChatFun
         public void SendMessageToServer(string message)
         {
             PacketBuilder packet = new();
-            packet.WriteOpCode(5);
+            packet.WriteOpCode(Opcode.Message);
             packet.WriteMessage(message);
             client.Client.Send(packet.GetPackedBytes());
         }
@@ -49,17 +49,17 @@ namespace ChatFun
         {
             while (true)
             {
-                byte opcode = PacketReader!.ReadByte();
+                Opcode opcode = PacketReader!.ReadOpcede();
 
-                switch(opcode)
+                switch (opcode)
                 {
-                    case 1:
+                    case Opcode.UserConnect:
                         ConnectedEvent?.Invoke();
                         break;
-                    case 5:
+                    case Opcode.Message:
                         MessageReceivedEvent?.Invoke();
                         break;
-                    case 10:
+                    case Opcode.UserDisconnect:
                         DisconnectedEvent?.Invoke();
                         break;
                 }
