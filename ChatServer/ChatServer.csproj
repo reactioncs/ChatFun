@@ -11,4 +11,12 @@
     <ProjectReference Include="..\ChatCommon\ChatCommon.csproj" />
   </ItemGroup>
 
+  <Target Name="CopyConfigFile" AfterTargets="Build">
+    <ItemGroup>
+      <MySourceFiles Include="$(SolutionDir)config.txt" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(TargetDir)" />
+  </Target>
+
 </Project>

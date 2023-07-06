@@ -2,19 +2,30 @@
 using ChatCommon.IO;
 using System.Net;
 using System.Net.Sockets;
+using ChatCommon;
 
 ServerInstance serverInstance = new();
 serverInstance.Run();
 
 class ServerInstance
 {
-    private List<Client> clients = new();
+    private List<Client> clients;
+    private TcpListener? listener;
 
-    private TcpListener listener = new(IPAddress.Parse("192.168.110.81"), 8631);
+    public ServerInstance()
+    {
+        clients = new();
+
+        if (!ReadConfig.ReadAdress("config.txt", out IPAddress? adress, out int port))
+            return;
+        listener = new(adress!, port);
+
+        Console.WriteLine($"[{DateTime.Now}][Startup]   :Start Server on {adress}:{port}");
+    }
 
     public void Run()
     {
-        listener.Start();
+        listener!.Start();
 
         while (true)
         {

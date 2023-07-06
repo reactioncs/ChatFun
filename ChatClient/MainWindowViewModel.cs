@@ -6,15 +6,16 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using ChatCommon.Model;
 using System.Net;
+using ChatCommon;
 
 namespace ChatFun
 {
     public partial class MainWindowViewModel: ObservableObject
     {
         [ObservableProperty]
-        private string address = "192.168.110.81";
+        private string address = "";
         [ObservableProperty]
-        private string portStr = "8631";
+        private string portStr = "";
         [ObservableProperty]
         private string username = "Alice";
         [ObservableProperty]
@@ -52,9 +53,15 @@ namespace ChatFun
                     return;
                 if (!int.TryParse(PortStr, out int port))
                     return;
+                try
+                {
+                    server.ConnectToServer(ipAddress, port, Username);
+                    IsConnected = true;
+                }
+                catch
+                {
 
-                server.ConnectToServer(ipAddress, port, Username);
-                IsConnected = true;
+                }
             }
         }
 
@@ -74,9 +81,14 @@ namespace ChatFun
             return true;
         }
 
-
         public MainWindowViewModel()
         {
+            if (ReadConfig.ReadAdress("config.txt", out IPAddress? adress, out int port))
+            {
+                Address = adress!.ToString();
+                PortStr = port.ToString();
+            }
+
             server.UserConnectedEvent += UserConnected;
             server.MessageReceivedEvent += MessageReceived;
             server.UserDisconnectedEvent += UserDisconnected;
