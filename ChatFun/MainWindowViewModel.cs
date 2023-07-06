@@ -45,30 +45,26 @@ namespace ChatFun
 
         public MainWindowViewModel()
         {
-            server.ConnectedEvent += UserConnected;
+            server.UserConnectedEvent += UserConnected;
             server.MessageReceivedEvent += MessageReceived;
-            server.DisconnectedEvent += Disconnected;
+            server.UserDisconnectedEvent += UserDisconnected;
         }
 
-        private void UserConnected()
+        private void UserConnected(UserModel user)
         {
-            UserModel user = new(server.PacketReader!.ReadMessage(), new(server.PacketReader!.ReadMessage()));
-
             if (!Users.Any(x => x.UID == user.UID))
             {
                 Application.Current.Dispatcher.Invoke(() => Users.Add(user));
             }
         }
 
-        private void MessageReceived()
+        private void MessageReceived(string message)
         {
-            string message = server.PacketReader!.ReadMessage();
             Application.Current.Dispatcher.Invoke(() => Messages.Add(message));
         }
 
-        private void Disconnected()
+        private void UserDisconnected(Guid uid)
         {
-            Guid uid = new(server.PacketReader!.ReadMessage());
             UserModel? user = Users.Where(u => u.UID == uid).FirstOrDefault();
             if (user == null)
                 return;

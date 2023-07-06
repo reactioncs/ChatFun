@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using ChatCommon.IO;
+using ChatCommon.Model;
 
 namespace ChatFun
 {
@@ -11,9 +12,9 @@ namespace ChatFun
 
         public PacketReader? PacketReader { get; private set; }
 
-        public event Action? ConnectedEvent;
-        public event Action? MessageReceivedEvent;
-        public event Action? DisconnectedEvent;
+        public event Action<UserModel>? UserConnectedEvent;
+        public event Action<string>? MessageReceivedEvent;
+        public event Action<Guid>? UserDisconnectedEvent;
 
         public Server()
         {
@@ -54,13 +55,16 @@ namespace ChatFun
                 switch (opcode)
                 {
                     case Opcode.UserConnect:
-                        ConnectedEvent?.Invoke();
+                        UserModel user = new(PacketReader!.ReadMessage(), new(PacketReader!.ReadMessage()));
+                        UserConnectedEvent?.Invoke(user);
                         break;
                     case Opcode.Message:
-                        MessageReceivedEvent?.Invoke();
+                        string message = PacketReader!.ReadMessage();
+                        MessageReceivedEvent?.Invoke(message);
                         break;
                     case Opcode.UserDisconnect:
-                        DisconnectedEvent?.Invoke();
+                        Guid uid = new(PacketReader!.ReadMessage());
+                        UserDisconnectedEvent?.Invoke(uid);
                         break;
                 }
             }
