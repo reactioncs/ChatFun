@@ -3,10 +3,10 @@ using ChatCommon.IO;
 using System.Net;
 using System.Net.Sockets;
 
-ClientInstance clientInstance = new();
-clientInstance.Run();
+ServerInstance serverInstance = new();
+serverInstance.Run();
 
-class ClientInstance
+class ServerInstance
 {
     private List<Client> clients = new();
 

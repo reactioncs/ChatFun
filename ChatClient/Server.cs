@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using ChatCommon.IO;
@@ -8,20 +10,20 @@ namespace ChatFun
 {
     public class Server
     {
-        private readonly TcpClient client;
-
-        public PacketReader? PacketReader { get; private set; }
-
         public event Action<UserModel>? UserConnectedEvent;
         public event Action<string>? MessageReceivedEvent;
         public event Action<Guid>? UserDisconnectedEvent;
+
+        private TcpClient client;
+
+        private PacketReader? PacketReader;
 
         public Server()
         {
             client = new();
         }
 
-        public void ConnectToServer(string address, int port, string username)
+        public void ConnectToServer(IPAddress address, int port, string username)
         {
             if (client.Connected)
                 return;
@@ -38,6 +40,12 @@ namespace ChatFun
             Task.Run(Process);
         }
 
+        public void DisConnect()
+        {
+            client.Close();
+            client = new();
+        }
+
         public void SendMessageToServer(string message)
         {
             PacketBuilder packet = new();
@@ -50,22 +58,29 @@ namespace ChatFun
         {
             while (true)
             {
-                Opcode opcode = PacketReader!.ReadOpcede();
-
-                switch (opcode)
+                try
                 {
-                    case Opcode.UserConnect:
-                        UserModel user = new(PacketReader!.ReadMessage(), new(PacketReader!.ReadMessage()));
-                        UserConnectedEvent?.Invoke(user);
-                        break;
-                    case Opcode.Message:
-                        string message = PacketReader!.ReadMessage();
-                        MessageReceivedEvent?.Invoke(message);
-                        break;
-                    case Opcode.UserDisconnect:
-                        Guid uid = new(PacketReader!.ReadMessage());
-                        UserDisconnectedEvent?.Invoke(uid);
-                        break;
+                    Opcode opcode = PacketReader!.ReadOpcede();
+
+                    switch (opcode)
+                    {
+                        case Opcode.UserConnect:
+                            UserModel user = new(PacketReader!.ReadMessage(), new(PacketReader!.ReadMessage()));
+                            UserConnectedEvent?.Invoke(user);
+                            break;
+                        case Opcode.Message:
+                            string message = PacketReader!.ReadMessage();
+                            MessageReceivedEvent?.Invoke(message);
+                            break;
+                        case Opcode.UserDisconnect:
+                            Guid uid = new(PacketReader!.ReadMessage());
+                            UserDisconnectedEvent?.Invoke(uid);
+                            break;
+                    }
+                }
+                catch (Exception)
+                {
+                    break;
                 }
             }
         }

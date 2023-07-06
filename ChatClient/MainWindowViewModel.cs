@@ -5,6 +5,7 @@ using System.Windows;
 using System.Collections.ObjectModel;
 using System.Linq;
 using ChatCommon.Model;
+using System.Net;
 
 namespace ChatFun
 {
@@ -17,6 +18,10 @@ namespace ChatFun
         [ObservableProperty]
         private string username = "Alice";
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(ConnectButtonDisplay))]
+        [NotifyCanExecuteChangedFor(nameof(SendMessageCommand))]
+        private bool isConnected = false;
+        [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SendMessageCommand))]
         private string message = string.Empty;
 
@@ -25,13 +30,32 @@ namespace ChatFun
 
         private Server server = new();
 
-        [RelayCommand]
-        private void Connect()
-        {
-            if (!int.TryParse(PortStr, out int port))
-                return;
+        public string ConnectButtonDisplay => IsConnected ? "Disconnect" : "Connect";
 
-            server.ConnectToServer(Address, port, Username);
+        [RelayCommand]
+        private void ToggleConnection()
+        {
+            if (IsConnected)
+            {
+                server.DisConnect();
+
+                Users.Clear();
+                Messages.Clear();
+
+                IsConnected = false;
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(Username))
+                    return;
+                if (!IPAddress.TryParse(Address, out IPAddress? ipAddress))
+                    return;
+                if (!int.TryParse(PortStr, out int port))
+                    return;
+
+                server.ConnectToServer(ipAddress, port, Username);
+                IsConnected = true;
+            }
         }
 
         [RelayCommand(CanExecute = nameof(CanSendMessage))]
@@ -40,7 +64,15 @@ namespace ChatFun
             server.SendMessageToServer(Message);
             Message = string.Empty;
         }
-        private bool CanSendMessage() => !string.IsNullOrEmpty(Message);
+        private bool CanSendMessage()
+        {
+            if (string.IsNullOrEmpty(Message))
+                return false;
+            if (!IsConnected)
+                return false;
+
+            return true;
+        }
 
 
         public MainWindowViewModel()

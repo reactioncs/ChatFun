@@ -28,8 +28,8 @@
                 <hc:TextBox Text="{Binding Address}" Margin="2"/>
                 <hc:TextBox Text="{Binding PortStr}" Margin="2"/>
                 <hc:TextBox Text="{Binding Username}" Margin="2"/>
-                <Button Content="connect"
-                        Command="{Binding ConnectCommand}"
+                <Button Content="{Binding ConnectButtonDisplay}"
+                        Command="{Binding ToggleConnectionCommand}"
                         Margin="2" HorizontalAlignment="Stretch"/>
             </StackPanel>
 
