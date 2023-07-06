@@ -36,8 +36,8 @@ class ClientInstance
             {
                 PacketBuilder broadCastPacket = new();
                 broadCastPacket.WriteOpCode(Opcode.UserConnect);
-                broadCastPacket.WriteMessage(client.UserName);
-                broadCastPacket.WriteMessage(client.UID.ToString());
+                broadCastPacket.WriteMessage(client.User.UserName);
+                broadCastPacket.WriteMessage(client.User.UID.ToString());
                 client_to_send.ClientSocket.Client.Send(broadCastPacket.GetPackedBytes());
             }
         }
@@ -57,7 +57,7 @@ class ClientInstance
 
     private void BroadCastDisconnected(Guid uid)
     {
-        Client disconnectedClient = clients.Where(c => c.UID == uid).FirstOrDefault()!;
+        Client disconnectedClient = clients.Where(c => c.User.UID == uid).FirstOrDefault()!;
         clients.Remove(disconnectedClient);
 
         PacketBuilder broadCastPacket = new();

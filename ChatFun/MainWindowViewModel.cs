@@ -4,6 +4,7 @@ using System;
 using System.Windows;
 using System.Collections.ObjectModel;
 using System.Linq;
+using ChatCommon.Model;
 
 namespace ChatFun
 {
@@ -75,6 +76,4 @@ namespace ChatFun
             Application.Current.Dispatcher.Invoke(() => Users.Remove(user));
         }
     }
-
-    public record UserModel(string UserName, Guid UID);
 }

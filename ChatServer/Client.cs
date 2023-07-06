@@ -1,13 +1,13 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using ChatCommon.IO;
+using ChatCommon.Model;
 
 namespace ChatServer
 {
     public class Client
     {
-        public string UserName { get; set; } = string.Empty;
-        public Guid UID { get; set; }
+        public UserModel User { get; set; }
         public TcpClient ClientSocket { get; set; }
 
         public event Action<string>? MessageReceivedEvent;
@@ -18,15 +18,15 @@ namespace ChatServer
         public Client(TcpClient client)
         {
             ClientSocket = client;
-            UID = Guid.NewGuid();
 
             packetReader = new(ClientSocket.GetStream());
 
             Opcode opcode = packetReader.ReadOpcede();
-            UserName = packetReader.ReadMessage();
+            string username = packetReader.ReadMessage();
+            User = new(username);
 
             IPEndPoint p = (IPEndPoint)client.Client.RemoteEndPoint!;
-            Console.WriteLine($"[{DateTime.Now}]: Client connected: {UserName} From: {p.Address}:{p.Port}");
+            Console.WriteLine($"[{DateTime.Now}]: Client connected: {User.UserName} From: {p.Address}:{p.Port}");
 
             Task.Run(Process);
         }
@@ -49,9 +49,9 @@ namespace ChatServer
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine($"[{DateTime.Now}]: {UID} Disconnected");
+                    Console.WriteLine($"[{DateTime.Now}]: {User.UID} Disconnected");
                     ClientSocket.Close();
-                    DisconnectedEvent?.Invoke(UID);
+                    DisconnectedEvent?.Invoke(User.UID);
                     break;
                 }
             }
