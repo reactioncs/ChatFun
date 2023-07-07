@@ -42,7 +42,7 @@ namespace ChatServer
                     {
                         case Opcode.Message:
                             string message = packetReader.ReadMessage();
-                            Console.WriteLine($"[{DateTime.Now}][Message]   : \"{message}\"({User.UserName})");
+                            Console.WriteLine($"[{DateTime.Now}][Message]   : {message}   ({User.UserName})");
                             MessageReceivedEvent?.Invoke(message);
                             break;
                     }

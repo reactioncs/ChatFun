@@ -71,7 +71,7 @@ namespace ChatFun
         private void SendMessage()
         {
             server.SendMessageToServer(Message);
-            Message = string.Empty;
+            //Message = string.Empty;
         }
         private bool CanSendMessage()
         {
