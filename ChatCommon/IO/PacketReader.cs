@@ -1,13 +1,12 @@
-﻿using System.Net.Sockets;
-using System.Text;
+﻿using System.Text;
 
 namespace ChatCommon.IO
 {
     public class PacketReader : BinaryReader
     {
-        private readonly NetworkStream stream;
+        private readonly Stream stream;
 
-        public PacketReader(NetworkStream ns) : base(ns)
+        public PacketReader(Stream ns) : base(ns)
         {
             stream = ns;
         }

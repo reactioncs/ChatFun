@@ -11,6 +11,8 @@ namespace ChatFun
 {
     public class Server
     {
+        public UserModel User { get; set; }
+
         public event Action<UserModel>? UserConnectedEvent;
         public event Action<string>? MessageReceivedEvent;
         public event Action<Guid>? UserDisconnectedEvent;
@@ -21,6 +23,7 @@ namespace ChatFun
 
         public Server()
         {
+            User = new();
             client = new();
         }
 
@@ -33,9 +36,12 @@ namespace ChatFun
 
             PacketReader = new(client.GetStream());
 
+            User.UserName = username;
+
             PacketBuilder packet = new();
             packet.WriteOpCode(Opcode.EstablishConnection);
-            packet.WriteMessage(username);
+            packet.WriteMessage(User.UserName);
+            packet.WriteMessage(User.UID.ToString());
             client.Client.Send(packet.GetPackedBytes());
 
             Thread ProcessThread = new(Process);

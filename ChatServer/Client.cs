@@ -13,7 +13,7 @@ namespace ChatServer
         public event Action<string>? MessageReceivedEvent;
         public event Action<Guid>? DisconnectedEvent;
 
-        private PacketReader packetReader;
+        private readonly PacketReader packetReader;
 
         public Client(TcpClient client)
         {
@@ -21,9 +21,12 @@ namespace ChatServer
 
             packetReader = new(ClientSocket.GetStream());
 
-            Opcode opcode = packetReader.ReadOpcede();
+            if (packetReader.ReadOpcede() != Opcode.EstablishConnection)
+                throw new Exception("EstablishConnection failed.");
+
             string username = packetReader.ReadMessage();
-            User = new(username);
+            Guid uid = new(packetReader.ReadMessage());
+            User = new(username, uid);
 
             IPEndPoint p = (IPEndPoint)client.Client.RemoteEndPoint!;
             Console.WriteLine($"[{DateTime.Now}][Connect]   : UserName: \"{User.UserName}\" From: {p.Address}:{p.Port}");
