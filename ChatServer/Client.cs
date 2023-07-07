@@ -26,9 +26,10 @@ namespace ChatServer
             User = new(username);
 
             IPEndPoint p = (IPEndPoint)client.Client.RemoteEndPoint!;
-            Console.WriteLine($"[{DateTime.Now}][Connect]   : UserName: {User.UserName} From: {p.Address}:{p.Port}");
+            Console.WriteLine($"[{DateTime.Now}][Connect]   : UserName: \"{User.UserName}\" From: {p.Address}:{p.Port}");
 
-            Task.Run(Process);
+            Thread ProcessThread = new(Process);
+            ProcessThread.Start();
         }
 
         private void Process()
@@ -47,9 +48,9 @@ namespace ChatServer
                             break;
                     }
                 }
-                catch (Exception)
+                catch (IOException)
                 {
-                    Console.WriteLine($"[{DateTime.Now}][Disconnect]: UserName: {User.UserName} ({User.UID})");
+                    Console.WriteLine($"[{DateTime.Now}][Disconnect]: UserName: \"{User.UserName}\" ({User.UID})");
                     ClientSocket.Close();
                     DisconnectedEvent?.Invoke(User.UID);
                     break;

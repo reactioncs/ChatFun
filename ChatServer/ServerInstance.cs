@@ -7,23 +7,23 @@ namespace ChatServer
 {
     class ServerInstance
     {
-        private List<Client> clients;
-        private TcpListener? listener;
+        private readonly List<Client> clients;
+        private readonly TcpListener? listener;
 
         public ServerInstance()
         {
             clients = new();
 
-            if (!ReadConfig.ReadAdress("config.txt", out IPAddress? adress, out int port))
+            if (!ReadConfig.ReadAdress("config.txt", out IPAddress adress, out int port))
                 return;
-            listener = new(adress!, port);
+            listener = new(adress, port);
 
             Console.WriteLine($"[{DateTime.Now}][Startup]   : Start Server on {adress}:{port}");
         }
 
         public void Run()
         {
-            listener!.Start();
+            listener!.Start(100);
 
             while (true)
             {

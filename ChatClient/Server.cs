@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
 using ChatCommon.IO;
 using ChatCommon.Model;
@@ -37,7 +38,8 @@ namespace ChatFun
             packet.WriteMessage(username);
             client.Client.Send(packet.GetPackedBytes());
 
-            Task.Run(Process);
+            Thread ProcessThread = new(Process);
+            ProcessThread.Start();
         }
 
         public void DisConnect()
@@ -78,7 +80,7 @@ namespace ChatFun
                             break;
                     }
                 }
-                catch (Exception)
+                catch (IOException)
                 {
                     break;
                 }

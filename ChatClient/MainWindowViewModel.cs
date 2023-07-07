@@ -85,9 +85,9 @@ namespace ChatFun
 
         public MainWindowViewModel()
         {
-            if (ReadConfig.ReadAdress("config.txt", out IPAddress? adress, out int port))
+            if (ReadConfig.ReadAdress("config.txt", out IPAddress adress, out int port))
             {
-                Address = adress!.ToString();
+                Address = adress.ToString();
                 PortStr = port.ToString();
             }
 
