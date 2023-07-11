@@ -24,5 +24,11 @@ namespace ChatFun
         {
             InitializeComponent();
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Server server = Server.Instance;
+            server.DisConnect();
+        }
     }
 }

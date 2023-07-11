@@ -21,10 +21,20 @@ namespace ChatFun
 
         private PacketReader? PacketReader;
 
-        public Server()
+        private Server()
         {
             User = new();
             client = new();
+        }
+
+        private static Server? mInstance = null;
+        public static Server Instance
+        {
+            get
+            {
+                mInstance ??= new Server();
+                return mInstance;
+            }
         }
 
         public async Task ConnectToServerAsync(IPAddress address, int port, string username)

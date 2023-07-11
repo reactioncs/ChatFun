@@ -30,7 +30,7 @@ namespace ChatFun
         public ObservableCollection<UserModel> Users { get; set; } = new();
         public ObservableCollection<string> Messages { get; set; } = new();
 
-        private Server server = new();
+        private readonly Server server = Server.Instance;
 
         public string ConnectButtonDisplay => IsConnected ? "Disconnect" : "Connect";
 
