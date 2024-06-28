@@ -78,7 +78,7 @@ namespace ChatFun
             {
                 try
                 {
-                    Opcode opcode = PacketReader!.ReadOpcede();
+                    Opcode opcode = PacketReader!.ReadOpcode();
 
                     switch (opcode)
                     {

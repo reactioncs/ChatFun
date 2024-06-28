@@ -21,7 +21,7 @@ namespace ChatServer
 
             packetReader = new(ClientSocket.GetStream());
 
-            if (packetReader.ReadOpcede() != Opcode.EstablishConnection)
+            if (packetReader.ReadOpcode() != Opcode.EstablishConnection)
                 throw new Exception("EstablishConnection failed.");
 
             string username = packetReader.ReadMessage();
@@ -41,7 +41,7 @@ namespace ChatServer
             {
                 try
                 {
-                    Opcode opcode = packetReader.ReadOpcede();
+                    Opcode opcode = packetReader.ReadOpcode();
                     switch (opcode)
                     {
                         case Opcode.Message:

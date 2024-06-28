@@ -24,7 +24,7 @@ namespace ChatCommon.IO
             return message;
         }
 
-        public Opcode ReadOpcede()
+        public Opcode ReadOpcode()
         {
             return (Opcode)ReadByte();
         }

@@ -12,13 +12,13 @@ namespace ChatServer
 
         public ServerInstance()
         {
-            clients = new();
+            clients = [];
 
-            if (!ReadConfig.ReadAdress("config.txt", out IPAddress adress, out int port))
+            if (!ReadConfig.ReadAddress("config.txt", out IPAddress address, out int port))
                 return;
-            listener = new(adress, port);
+            listener = new(address, port);
 
-            Console.WriteLine($"[{DateTime.Now}][Startup]   : Start Server on {adress}:{port}");
+            Console.WriteLine($"[{DateTime.Now}][Startup]   : Start Server on {address}:{port}");
         }
 
         public void Run()
@@ -33,11 +33,11 @@ namespace ChatServer
                 client.DisconnectedEvent += BroadCastDisconnected;
                 clients.Add(client);
 
-                BroadCastConnention();
+                BroadCastConnection();
             }
         }
 
-        private void BroadCastConnention()
+        private void BroadCastConnection()
         {
             foreach (Client client_to_send in clients)
             {

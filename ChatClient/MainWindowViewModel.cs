@@ -27,8 +27,8 @@ namespace ChatFun
         [NotifyCanExecuteChangedFor(nameof(SendMessageCommand))]
         private string message = string.Empty;
 
-        public ObservableCollection<UserModel> Users { get; set; } = new();
-        public ObservableCollection<string> Messages { get; set; } = new();
+        public ObservableCollection<UserModel> Users { get; set; } = [];
+        public ObservableCollection<string> Messages { get; set; } = [];
 
         private readonly Server server = Server.Instance;
 
@@ -85,9 +85,9 @@ namespace ChatFun
 
         public MainWindowViewModel()
         {
-            if (ReadConfig.ReadAdress("config.txt", out IPAddress adress, out int port))
+            if (ReadConfig.ReadAddress("config.txt", out IPAddress address, out int port))
             {
-                Address = adress.ToString();
+                Address = address.ToString();
                 PortStr = port.ToString();
             }
 

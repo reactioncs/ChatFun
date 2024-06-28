@@ -4,7 +4,7 @@ namespace ChatCommon
 {
     public class ReadConfig
     {
-        public static bool ReadAdress(string path, out IPAddress address, out int port)
+        public static bool ReadAddress(string path, out IPAddress address, out int port)
         {
             port = 0;
 
