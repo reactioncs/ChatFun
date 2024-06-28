@@ -14,25 +14,32 @@ namespace ChatFun
     public partial class MainWindowViewModel: ObservableObject
     {
         [ObservableProperty]
-        private string address = "";
+        private string address = string.Empty;
+
         [ObservableProperty]
-        private string portStr = "";
+        private string portStr = string.Empty;
+
         [ObservableProperty]
         private string username = "Alice";
+
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(ConnectButtonDisplay))]
+        [NotifyPropertyChangedFor(nameof(Title))]
         [NotifyCanExecuteChangedFor(nameof(SendMessageCommand))]
         private bool isConnected = false;
+
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SendMessageCommand))]
         private string message = string.Empty;
+
+        public string ConnectButtonDisplay => IsConnected ? "Disconnect" : "Connect";
+
+        public string Title => IsConnected ? $"Chat Client - Connected ({Username})" : "Chat Client - Disconnected";
 
         public ObservableCollection<UserModel> Users { get; set; } = [];
         public ObservableCollection<string> Messages { get; set; } = [];
 
         private readonly Server server = Server.Instance;
-
-        public string ConnectButtonDisplay => IsConnected ? "Disconnect" : "Connect";
 
         [RelayCommand]
         private async Task ToggleConnectionAsync()

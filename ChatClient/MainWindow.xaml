@@ -5,7 +5,7 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:local="clr-namespace:ChatFun"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        Title="MainWindow"
+        Title="{Binding Title}"
         Closing="Window_Closing"
         Width="700" Height="480"
         mc:Ignorable="d">
