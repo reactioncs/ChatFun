@@ -1,5 +1,3 @@
-# Chat App Server with C# Socket
+# Chat App Server and Client with C# Socket
 
-- [x] Complete with tutorial
-
-- [ ] refinement
+![main_window](pics/main_window.png)
